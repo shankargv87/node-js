@@ -15,7 +15,7 @@ csvtojson().fromFile(csvFilePath)
         return
     }
 
-    const jsonString = JSON.stringify(jsonArray)
+    const jsonString = JSON.stringify(jsonArray, null, 2)
     fs.writeFileSync(jsonFilePath, jsonString, {'encoding': 'utf-8'})
 
     console.log('Completed.')
