@@ -44,6 +44,7 @@ function migrate(parallel) {
 
 function process() {
     let parallel = dbConfig.numberOfRecords / threadCount;
+    console.log('Parallel queries per batch :: ', parallel);
 
     dataAccess.connectDatabase(() => {
         dataAccess.getCustomerAddressData((data) => {
@@ -62,7 +63,7 @@ let threadCount = dbConfig.defaultCount;
 
 if(global.process.argv.length > 2) {
     threadCount = parseInt(global.process.argv[2])
-    console.log(threadCount);
+    console.log('Batch Size :: ', threadCount);
 }
 
 process()
