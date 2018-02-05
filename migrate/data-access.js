@@ -2,11 +2,14 @@ const mongodb = require('mongodb')
 const dbConfig = require('./db-config.js')
 let customerDataDb = null;
 let customerAddressDataDb = null;
+let customerDataClient = null;
+let customerAddressDataClient = null;
 let connected = 0;
 
 function connectDatabase(callback) {
     mongodb.MongoClient.connect(dbConfig.customerDataDb, (error, db) => {
         if(error) return process.exit(1)
+        customerDataClient = db;
         customerDataDb = db.db('customer-data-db');
         console.log('Customer Data Database connected')
         connected += 1;
@@ -15,6 +18,7 @@ function connectDatabase(callback) {
 
     mongodb.MongoClient.connect(dbConfig.customerAddressDataDb, (error, db) => {
         if(error) return process.exit(1)
+        customerAddressDataClient = db;
         customerAddressDataDb = db.db('customer-address-data-db');
         console.log('Customer Address Data Database connected')
         connected += 1;
@@ -23,8 +27,8 @@ function connectDatabase(callback) {
 }
 
 function closeDatabase() {
-    customerDataDb.close();
-    customerAddressDataDb.close();
+    customerDataClient.close();
+    customerAddressDataClient.close();
 }
 
 function getCustomerData(callback) {

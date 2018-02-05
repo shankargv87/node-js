@@ -24,6 +24,7 @@ function getParallelTask(thread, parallelCount) {
 
 function migrate(parallel) {
     if(threadCounter == threadCount) {
+        dataAccess.closeDatabase()
         console.log('Migration Completed');
     }
     else {
@@ -36,15 +37,14 @@ function migrate(parallel) {
                     updatedCount += 1;
                 }
             })
-            console.log(`Updated count for batch ${threadCounter}:: `, updatedCount)
+            console.log(`Updated count for batch ${threadCounter} :: `, updatedCount)
             migrate(parallel);
         })
     }
 }
 
 function process() {
-    let parallel = dbConfig.numberOfRecords / threadCount;
-    console.log('Parallel queries per batch :: ', parallel);
+    let parallel = 0;
 
     dataAccess.connectDatabase(() => {
         dataAccess.getCustomerAddressData((data) => {
@@ -53,6 +53,8 @@ function process() {
             dataAccess.getCustomerData((custdata) => {
                 customerDataArray = custdata;
 
+                parallel = customerAddressDataArray.length / threadCount;
+                console.log('Parallel queries per batch :: ', parallel);
                 migrate(parallel);
             })
         })
