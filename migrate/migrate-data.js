@@ -36,7 +36,7 @@ function migrate(parallel) {
                     updatedCount += 1;
                 }
             })
-            console.log('Updated Count :: ', updatedCount)
+            console.log(`Updated count for batch ${threadCounter}:: `, updatedCount)
             migrate(parallel);
         })
     }
